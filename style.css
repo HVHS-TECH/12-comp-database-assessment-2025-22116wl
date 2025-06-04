@@ -1,0 +1,28 @@
+#gamesSpace {
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	height: 80vh;
+	width: 95vw;
+}
+.gameIcon {
+	width: 180px;
+	height: 240px;
+
+	border: 3px solid black;
+	border-radius: 10px;
+}
+
+.gameIcon img {
+	width: 100%;
+	height: 180px;
+	background-color: gray;
+}
+
+.gameIcon p {
+	width: 100%;
+	text-align: center;
+	margin-top: auto;
+
+	float: bottom;
+}
