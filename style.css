@@ -1,28 +1,72 @@
+* {
+	font-family: sans-serif;
+}
+
+body {
+	margin: 0px;
+}
+
 #gamesSpace {
-	display:block;
 	margin-left: auto;
 	margin-right: auto;
 	height: 80vh;
-	width: 95vw;
+	width: auto;
+	margin: 30px;
+
+	display: block;
 }
+
+.row {
+	display: flex;
+ 	justify-content: center;
+
+	height: auto;
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .gameIcon {
 	width: 180px;
-	height: 240px;
 
-	border: 3px solid black;
+	border: 2px solid black;
 	border-radius: 10px;
+
+	transition: transform 0.1s ease;
+
+	margin: 10px;
 }
 
 .gameIcon img {
 	width: 100%;
 	height: 180px;
 	background-color: gray;
+	border-radius: 8px 8px 0px 0px;
+}
+
+.gameIcon:hover {
+	transform: scale(1.05);
+	transform-origin: center;
+
 }
 
 .gameIcon p {
-	width: 100%;
+	width: auto;
 	text-align: center;
-	margin-top: auto;
+	padding: 5px;
+	margin-top: 0px;
+	margin-bottom: 6px;
+}
 
-	float: bottom;
+a {
+	color: black;
+	text-decoration: none;
+}
+
+h1 { 
+	text-align: center;
+	width: 100%;
+	border-bottom: 2px solid gray;
+	margin: 0px;
+	padding: 20px;
 }

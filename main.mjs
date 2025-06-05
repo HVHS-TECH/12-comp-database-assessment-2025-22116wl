@@ -17,3 +17,6 @@ window.fb_delete = fb_delete;
 window.Submit = Submit;
 
 fb_initialise();
+
+var game;
+
