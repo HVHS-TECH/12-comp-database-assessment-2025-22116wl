@@ -29,8 +29,6 @@ const WAVE_DATA_DICTIONARY = [
 function setup() {
     cnv = new Canvas('5:7');
     
-    document.getElementById('horizontalContainer').appendChild(document.querySelector('.p5-fullscreen'));
-
     world.gravity = 0;
     guns = new Group();
 

@@ -14,9 +14,14 @@ window.fb_write = fb_write;
 window.fb_update = fb_update;
 window.fb_readSorted = fb_readSorted;
 window.fb_delete = fb_delete;
-window.Submit = Submit;
 
 fb_initialise();
 
-var game;
+const elements = document.getElementsByClassName('gameIcon');
+for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
 
+    element.addEventListener("click", () => {
+        sessionStorage.setItem('game', element.id);
+    });
+}

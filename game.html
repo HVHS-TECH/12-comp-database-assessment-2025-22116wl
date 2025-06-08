@@ -30,6 +30,23 @@
         </div>
 
         <script type="module" src="./main.mjs"></script>
-        <script src="../GameScripts/space_shooter.js"></script>
+
+        
+        
+        
+        <!-- Create a script tag and load in the game from the folder -->
+        <script>
+            const game = sessionStorage.getItem('game');
+            if (game != null) {
+                const script = document.createElement('script');
+                script.src = `./GameScripts/${game}.js`;
+                
+                document.head.appendChild(script);
+            } else {
+                console.log("No game in session storage");
+            }
+        </script>
+        
+        <script src="./gamePageScript.js"></script>
     </body>
 </html>
