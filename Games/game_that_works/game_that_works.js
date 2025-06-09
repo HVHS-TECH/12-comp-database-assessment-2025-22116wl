@@ -15,9 +15,9 @@ var powerUpsApplied = 0;
 
 
 function preload() {
-    coinIMG = loadImage('coin.png');
-    speedBoostIMG = loadImage('SpeedBoost.png');
-    magnetIMG = loadImage('Magnet.png');
+    coinIMG = loadImage('./Assets/Images/coin.png');
+    speedBoostIMG = loadImage('./Assets/Images/SpeedBoost.png');
+    magnetIMG = loadImage('./Assets/Images/Magnet.png');
 }
 
 function setup() {

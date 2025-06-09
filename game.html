@@ -15,7 +15,7 @@
         <script src="https://p5play.org/v3/planck.min.js"></script>
         <script src="https://p5play.org/v3/p5play.js"></script>
 
-        <link rel="stylesheet" href="../style.css">
+        <link rel="stylesheet" href="./style.css">
         
     </head>
 
@@ -39,9 +39,11 @@
             const game = sessionStorage.getItem('game');
             if (game != null) {
                 const script = document.createElement('script');
-                script.src = `./GameScripts/${game}.js`;
+                script.src = './GameScripts/' + game + '.js';
                 
                 document.head.appendChild(script);
+
+                console.log("Successfully added game tag");
             } else {
                 console.log("No game in session storage");
             }
