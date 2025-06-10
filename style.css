@@ -4,14 +4,15 @@
 
 body {
 	margin: 0px;
+	display: block;
 }
 
 #gamesSpace {
+	margin: 30px;
 	margin-left: auto;
 	margin-right: auto;
 	height: 80vh;
-	width: auto;
-	margin: 30px;
+	width: 90vw;
 
 	display: block;
 }
@@ -74,18 +75,21 @@ h1 {
 
 
 .p5-fullscreen { 
-	width: auto;
-	height: 100%;
 	margin-right: auto;
 
-	max-height: 100%;
+	max-height: calc(100vh - 117px);
 	order: 1;
+
+	padding-right: auto;
+
+	flex: 1;
+
+	background-color: black;
 }
 
 #horizontalContainer {
 	display: flex;
-	width: calc(100vw - 60px);
-	height: calc(100vh - 117px);
+	width: calc(100vw - 40px);
 
 	padding: 20px;
 }
@@ -94,7 +98,41 @@ h1 {
 	border: 3px solid gray;
 	border-radius: 5px;
 	margin-left: 30px;
+	
+	width: 20vw;
+	min-width: 20vw;
+
+	height: 80vh;
 
 	order: 2;
-	flex: 1;
+}
+
+#leaderboard {
+	padding-left: 35px;
+	padding-right: 15px;
+}
+
+.gameDataContainer h2 {
+	width: 100%;
+	text-align: center;
+	display: block;
+}
+
+#leaderboard li {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.leaderboardUsername {
+	text-align: left;
+	margin-left: 5px;
+	float: left;
+}
+
+.leaderboardScoreNumber {
+	text-align: right;
+	margin-left: auto;
+	margin-right: 5px;
+
+	float: right;
 }

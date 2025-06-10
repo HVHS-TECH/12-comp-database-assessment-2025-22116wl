@@ -1,6 +1,19 @@
 console.log(sessionStorage.getItem('game'));
 
-// Small wait so it can load before it parents it
-setTimeout(function() {
-    document.getElementById('horizontalContainer').appendChild(document.querySelector('.p5-fullscreen'));
-}, 2000);
+
+// Detect element added, if element is p5 canvas then add it to the div
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        for (const element of mutation.addedNodes) {
+            //if element is the p5 play canvas
+            if (element.className == "p5-fullscreen") {
+                document.getElementById('horizontalContainer').appendChild(element);
+
+                //disconnect function after canvas added
+                observer.disconnect();
+            }
+        }
+    }
+});
+
+observer.observe(document.body, {childList: true, subtree: true});

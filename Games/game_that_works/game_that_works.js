@@ -14,14 +14,16 @@ var coinGravityStrength = 0;
 var powerUpsApplied = 0;
 
 
+/*
 function preload() {
-    coinIMG = loadImage('./Assets/Images/coin.png');
-    speedBoostIMG = loadImage('./Assets/Images/SpeedBoost.png');
-    magnetIMG = loadImage('./Assets/Images/Magnet.png');
+    coinIMG = loadImage('/Games/game_that_works/Assets/Images/coin.png');
+    speedBoostIMG = loadImage('/Games/game_that_works/Assets/Images/SpeedBoost.png');
+    magnetIMG = loadImage('/Games/game_that_works/Assets/Images/Magnet.png');
 }
+*/
 
 function setup() {
-    cnv = new Canvas(windowWidth, windowHeight);
+    cnv = new Canvas("1.2:1");
     player = new Sprite(windowWidth/2, windowHeight/2, 100, 100, "k");  
     player.color = 'cyan';
 
@@ -100,8 +102,8 @@ function draw() {
 function newCoin() {
     coin = new Sprite(random(0, windowWidth), random(0, windowHeight), 40);
     coin.spawnTime = millis();
-    coinIMG.resize(50, 50);
-    coin.image = coinIMG;
+    //coinIMG.resize(50, 50);
+    //coin.image = coinIMG;
 
     coins.add(coin);
 }
@@ -115,12 +117,12 @@ function newPowerup() {
 
     if (effectNum < 0.8) {
         powerup.Effect = "SpeedBoost";
-        speedBoostIMG.resize(50, 50);
-        powerup.image = speedBoostIMG;
+        //speedBoostIMG.resize(50, 50);
+        //powerup.image = speedBoostIMG;
     } else if (effectNum < 2) {
         powerup.Effect = "Gravity";
-        magnetIMG.resize(50, 50);
-        powerup.image = magnetIMG;
+        //magnetIMG.resize(50, 50);
+        //powerup.image = magnetIMG;
     }
 
     powerup.Strength = random(1, 2);
