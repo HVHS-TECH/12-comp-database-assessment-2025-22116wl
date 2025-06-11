@@ -16,9 +16,28 @@
     <body>
         <script type="module" src="./main.mjs"></script>
 
-        <h1>
-            games!
-        </h1>
+        <header>
+            <div class = 'flexBox'>
+            	<div style = "display: block;">
+            		<button class = 'logInButton' id = "LogButton">
+						Log In
+                    </button>
+
+                    <button class = 'logInButton' id = "SettingsButton" onclick = changeName()>
+                        User Settings
+                    </button>
+
+                </div>
+
+
+                <p> Logged in<br>Display Name: <span id = 'DisplayName'></span> </p>
+
+                <h1>
+                    games!
+                </h1>
+    
+            </div>
+        </header>
 
         <div id = 'gamesSpace'>
             <div class = 'row'>

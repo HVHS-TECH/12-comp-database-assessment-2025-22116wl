@@ -10,7 +10,7 @@
 
 import { initializeApp }        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, limitToFirst } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, limitToFirst, limitToLast } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
     
 // fb_initialise()
@@ -37,27 +37,29 @@ function fb_initialise() {
 }
 
 
-function fb_authenticate() {
+async function fb_authenticate() {
     const AUTH = getAuth();
     const PROVIDER = new GoogleAuthProvider();
     
     // The following makes Google ask the user to select the account
-    PROVIDER.setCustomParameters({
-        prompt: 'select_account'
-    });
-    
-    signInWithPopup(AUTH, PROVIDER).then((result) => {
-        console.log('success');
-        console.log(result);
 
-        document.getElementById('name').innerHTML = "Your Name: " + AUTH.currentUser.displayName;
-        document.getElementById('SubmitButton').disabled = false;
-        document.getElementById('statusMessage').innerHTML = "";
-    })
-    
-    .catch((error) => {
-        console.log('error!');
-        console.log(error);
+    return new Promise((resolve) => {
+
+        
+        PROVIDER.setCustomParameters({
+            prompt: 'select_account'
+        });
+        
+        signInWithPopup(AUTH, PROVIDER).then((result) => {
+            console.log('success');
+            resolve(result);
+        })
+        
+        .catch((error) => {
+            console.log('error!');
+            console.log(error);
+            resolve(null);
+        });
     });
 }
 
@@ -81,12 +83,11 @@ function fb_logout() {
 
     signOut(AUTH).then(() => {
         console.log('successful logout');
-        document.getElementById('statusMessage').innerHTML = "Please log in"
     })
 
     .catch((error) => {
-        print('error in loging out');
-        print(error);
+        console.log('error in loging out');
+        console.log(error);
     });
 }
 
@@ -171,48 +172,42 @@ function fb_update(path, data) {
     */
 }
 
-function getLength(tableToCheck) {
-    var count = 0;
 
-    tableToCheck.forEach(function() { count += 1; });
+async function fb_readSorted(path, sortkey, number) {
+    const dbReference = ref(fb_db, path) ;
+    
+    console.log(path);
+    console.log(sortkey);
 
-    return i;
-}
-
-function fb_readSorted(path, sortkey, number) {
-    const dbReference= query(ref(fb_db, path), orderByChild(sortkey) ); //, limitToFirst(number));
-
-    get(dbReference).then((snapshot) => {
-
-        var sortedTable = {};
-        var numToTop = 6;
-
-        const LENGTH = getLength(snapshot.val());
-
-        console.log(snapshot.val());
+    return new Promise((resolve) => {
+        get(query(dbReference, orderByChild(sortkey), limitToLast(number))).then((snapshot) => {
+            var fb_data = snapshot.val();
             
-        for (var i = 0; i < numToTop; i++) {
-            console.log(i);
-            console.log(snapshot.val());
-            console.log(LENGTH);
-            console.log(snapshot.val()[LENGTH - i - 1]);
+            if (fb_data != null) {
+                //const LENGTH = Object.keys(snapshot.val()).length
+                
+                //put the values into array format
+                var valueArray = [];
+                snapshot.forEach((entry) => {
+                    
+                    const valObject = {
+                      [entry.key]: entry.val()[sortkey]
+                    };
+                    
+                    valueArray.unshift( valObject ); //unshift used to put values at start of array and move everythign else forward (reversing the array which is given backwards by firebase)
+                });
 
-
-            sortedTable[i] = snapshot.val()[snapshot.val().length - i - 1];
-
-        }
-
-        console.log(sortedTable);
-
-    if (fb_data != null) {
-            console.log('successful read');
-            console.log(fb_data);
-        } else {
-           console.log('no data found');
-        }
-    }).catch((error) => {
-        console.log('error!');
-        console.log(error);
+                console.log('successful read');
+                resolve(valueArray);
+            } else {
+                console.log('no data found');
+                resolve(null);
+            }
+        }).catch((error) => {
+            console.log('error!');
+            console.log(error);
+            resolve(null);
+        });
     });
 }
 

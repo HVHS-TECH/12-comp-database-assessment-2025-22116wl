@@ -17,11 +17,52 @@ window.fb_delete = fb_delete;
 
 fb_initialise();
 
-const elements = document.getElementsByClassName('gameIcon');
+const elements = document.getElementsByClassName('gameIcon'); 
 for (let i = 0; i < elements.length; i++) {
-    const element = elements[i];
-
-    element.addEventListener("click", () => {
-        sessionStorage.setItem('game', element.id);
+	const element = elements[i];
+	
+	element.addEventListener("click", () => {
+		sessionStorage.setItem('game', element.id);
     });
 }
+
+
+document.getElementById('LogButton').addEventListener('click', function() {
+
+    if (sessionStorage.getItem('UID') == null) {
+		login();
+	} else {
+		logout();
+	}
+});
+
+
+function updateStatus() {
+	document.getElementById('LogButton').innerHTML = "Log In";
+	
+}
+
+async function logout() {
+	await fb_logout();
+	sessionStorage.removeItem('UID');
+	updateStatus();
+}
+
+async function login() {
+	let userData = await fb_authenticate();
+	
+	sessionStorage.setItem('UID', userData.user.uid);
+	document.getElementById('LogButton').innerHTML = "Log Out";
+
+	document.getElementById('DisplayName').innerHTML = await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
+}
+
+async function changeName() {
+	var newName = prompt("What do you want your username to be?");
+	await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName )
+
+	document.getElementById('DisplayName').innerHTML = await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
+}
+
+window.changeName = changeName;
+

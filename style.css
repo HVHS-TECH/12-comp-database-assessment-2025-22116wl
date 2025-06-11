@@ -5,6 +5,7 @@
 body {
 	margin: 0px;
 	display: block;
+	height: 100vh;
 }
 
 #gamesSpace {
@@ -66,18 +67,35 @@ a {
 
 h1 { 
 	text-align: center;
-	width: 100%;
-	border-bottom: 2px solid gray;
+	width: 30%;
 	margin: 0px;
 	font-size: 40px;
 	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
+.logInButton {
+	height: 30px;
+	width: 100px;
+	margin: 10px;
+	display: block;
+	font-size: 13px;
+}
+
+header {
+	height: 100px;
+	border-bottom: 2px solid black;
+}
+
+.flexBox {
+	display: flex;
+}
 
 .p5-fullscreen { 
 	margin-right: auto;
 
-	max-height: calc(100vh - 117px);
+	max-height: calc(100vh - 68px);
 	order: 1;
 
 	padding-right: auto;
@@ -89,15 +107,15 @@ h1 {
 
 #horizontalContainer {
 	display: flex;
-	width: calc(100vw - 40px);
-
-	padding: 20px;
+	width: 100vw;
+	height: calc(100vh - 68px);
 }
 
 .gameDataContainer {
 	border: 3px solid gray;
 	border-radius: 5px;
-	margin-left: 30px;
+
+	margin: 30px;
 	
 	width: 20vw;
 	min-width: 20vw;
