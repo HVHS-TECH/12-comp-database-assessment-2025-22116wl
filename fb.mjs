@@ -44,8 +44,6 @@ async function fb_authenticate() {
     // The following makes Google ask the user to select the account
 
     return new Promise((resolve) => {
-
-        
         PROVIDER.setCustomParameters({
             prompt: 'select_account'
         });
@@ -176,9 +174,6 @@ function fb_update(path, data) {
 async function fb_readSorted(path, sortkey, number) {
     const dbReference = ref(fb_db, path) ;
     
-    console.log(path);
-    console.log(sortkey);
-
     return new Promise((resolve) => {
         get(query(dbReference, orderByChild(sortkey), limitToLast(number))).then((snapshot) => {
             var fb_data = snapshot.val();

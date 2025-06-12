@@ -1,6 +1,9 @@
 var currentGame = sessionStorage.getItem('game');
 console.log(currentGame);
 
+import { fb_initialise, fb_authenticate, fb_readSorted, fb_read, fb_write } from "./fb.mjs";
+fb_initialise();
+
 // Detect element added, if element is p5 canvas then add it to the div
 const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
@@ -19,22 +22,28 @@ const observer = new MutationObserver((mutationsList) => {
 observer.observe(document.body, {childList: true, subtree: true});
 
 console.log('listening');
-window.addEventListener('scoreChanged', (event) => {
+window.addEventListener('scoreChanged', async function(event) {
     console.log("Event received!");
-    console.log(event.detail.score);
 
     const score = event.detail.score;
-    const oldScore = fb_read('Leaderboard/' + currentGame + "/" + (sessionStorage.getItem("UID")) + "/Score");
+    const oldScore = await fb_read('Leaderboard/' + currentGame + "/" + (sessionStorage.getItem("UID")) + "/Score");
 
+    console.log(score);
+    console.log(oldScore);
+
+    await fb_authenticate();
+    
     if (score > oldScore) {
         //New High Schore
-        fb_write('Leaderboard/' + currentGame + "/" + sessionStorage.getItem("UID") + "/Score", score);
+
+        console.log("Leaderboard/" + currentGame + "/" + sessionStorage.getItem("UID"));
+
+        await fb_write("Leaderboard/" + currentGame + "/" + sessionStorage.getItem("UID"), { Score: score });
     }
 });
 
-import { fb_readSorted, fb_read } from "./fb.mjs";
-
 const leaderboardSpots = document.getElementsByClassName('leaderboardEntry').length;
+console.log(leaderboardSpots);
 var leaderboard = await fb_readSorted("Leaderboard/" + currentGame, "Score", leaderboardSpots);
 
 var entries = document.getElementsByClassName('leaderboardEntry');
