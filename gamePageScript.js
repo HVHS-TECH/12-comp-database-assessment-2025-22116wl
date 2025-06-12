@@ -18,6 +18,20 @@ const observer = new MutationObserver((mutationsList) => {
 
 observer.observe(document.body, {childList: true, subtree: true});
 
+console.log('listening');
+window.addEventListener('scoreChanged', (event) => {
+    console.log("Event received!");
+    console.log(event.detail.score);
+
+    const score = event.detail.score;
+    const oldScore = fb_read('Leaderboard/' + currentGame + "/" + (sessionStorage.getItem("UID")) + "/Score");
+
+    if (score > oldScore) {
+        //New High Schore
+        fb_write('Leaderboard/' + currentGame + "/" + sessionStorage.getItem("UID") + "/Score", score);
+    }
+});
+
 import { fb_readSorted, fb_read } from "./fb.mjs";
 
 const leaderboardSpots = document.getElementsByClassName('leaderboardEntry').length;

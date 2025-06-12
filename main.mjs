@@ -37,13 +37,29 @@ document.getElementById('LogButton').addEventListener('click', function() {
 });
 
 
-function updateStatus() {
-	document.getElementById('LogButton').innerHTML = "Log In";
+async function updateStatus() {
 	
+	
+	if (sessionStorage.getItem('UID') != null) {
+		document.getElementById('DisplayName').innerHTML = "Display Name: " + await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
+		document.getElementById('DisplayName').style = "Display: block;"
+
+		document.getElementById('LogButton').innerHTML = "Log Out";
+		document.getElementById('logStatus').innerHTML = "Logged in";
+
+		document.getElementById('SettingsButton').disabled = false;
+	} else {
+		document.getElementById('LogButton').innerHTML = "Log In";
+		document.getElementById('logStatus').innerHTML = "Not logged in";
+
+		document.getElementById('DisplayName').style = "Display: none;"
+
+		document.getElementById('SettingsButton').disabled = true;
+	}
 }
 
 async function logout() {
-	await fb_logout();
+	fb_logout();
 	sessionStorage.removeItem('UID');
 	updateStatus();
 }
@@ -51,18 +67,33 @@ async function logout() {
 async function login() {
 	let userData = await fb_authenticate();
 	
-	sessionStorage.setItem('UID', userData.user.uid);
-	document.getElementById('LogButton').innerHTML = "Log Out";
+	const UID = userData.user.uid
+	sessionStorage.setItem('UID', UID);
 
-	document.getElementById('DisplayName').innerHTML = await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
+	var userExists = await fb_read("UserData/" + UID);
+	if(userExists == null) {
+		fb_write("UserData/" + UID, 
+			{
+				Username: "",
+			}
+		)
+
+		Object.keys(await fb_read('Leaderboard')).forEach(game => {
+			fb_write("Leaderboard/" + game + "/" + UID, { Score: 0 } )
+		});
+		
+		changeName();
+	}
+
+	updateStatus();
 }
 
 async function changeName() {
-	var newName = prompt("What do you want your username to be?");
-	await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName )
-
-	document.getElementById('DisplayName').innerHTML = await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
+	var newName = prompt("What do you want your display name to be?");
+	await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
+	updateStatus();
 }
 
 window.changeName = changeName;
 
+updateStatus();

@@ -83,6 +83,18 @@ h1 {
 	font-size: 13px;
 }
 
+button:disabled {
+	background-color: rgb(240, 240, 240);
+}
+
+button {
+	background-color: rgb(200, 200, 200);
+}
+
+button:hover {
+	
+}
+
 header {
 	height: 100px;
 	border-bottom: 2px solid black;
