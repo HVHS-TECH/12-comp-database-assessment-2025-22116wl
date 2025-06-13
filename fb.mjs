@@ -206,4 +206,8 @@ async function fb_readSorted(path, sortkey, number) {
     });
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete };
+function readstuff() {
+    console.log(getAuth());
+}
+
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, readstuff };

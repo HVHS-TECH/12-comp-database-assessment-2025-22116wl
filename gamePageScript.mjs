@@ -1,8 +1,10 @@
 var currentGame = sessionStorage.getItem('game');
 console.log(currentGame);
 
-import { fb_initialise, fb_authenticate, fb_readSorted, fb_read, fb_write } from "./fb.mjs";
+import { fb_initialise, fb_authenticate, fb_readSorted, fb_read, fb_write, readstuff } from "./fb.mjs";
 fb_initialise();
+
+window.readstuff = readstuff();
 
 // Detect element added, if element is p5 canvas then add it to the div
 const observer = new MutationObserver((mutationsList) => {
