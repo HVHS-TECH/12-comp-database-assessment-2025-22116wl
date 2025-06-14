@@ -78,7 +78,7 @@ function getDist(x1, y1, x2, y2) {
 function startGame() {
     scene = 'game';
     score = 0;
-    coinDelay = 100;
+    coinDelay = 50;
 
     coinGravityStrength = 0;
     movementSpeed = 10;
@@ -99,8 +99,9 @@ function draw() {
     if (scene == 'finished') { finishedScreen() }
 }
 
+const SCREEN_PADDING = 200
 function newCoin() {
-    coin = new Sprite(random(0, cnv.w), random(0, cnv.h), 40);
+    coin = new Sprite(random(SCREEN_PADDING, cnv.w - SCREEN_PADDING), random(SCREEN_PADDING, cnv.h - SCREEN_PADDING), 40);
     coin.spawnTime = millis();
     //coinIMG.resize(50, 50);
     //coin.image = coinIMG;
@@ -215,6 +216,11 @@ function gameScreen() {
             if (score > highScore) {
                 highScore = score;
             }
+
+            //tell the other script score updated
+            window.dispatchEvent(new CustomEvent('scoreChanged', {
+                detail: { score: highScore }
+            }));
 
             continue;
         }

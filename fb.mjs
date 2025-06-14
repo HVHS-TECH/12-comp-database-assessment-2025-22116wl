@@ -10,7 +10,7 @@
 
 import { initializeApp }        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, limitToFirst, limitToLast } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, limitToFirst, limitToLast, onChildChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
     
 // fb_initialise()
@@ -36,6 +36,7 @@ function fb_initialise() {
     console.info(fb_db);
 }
 
+fb_initialise();
 
 async function fb_authenticate() {
     const AUTH = getAuth();
@@ -66,15 +67,18 @@ function fb_authChanged() {
 
     onAuthStateChanged(AUTH, (user) => {
         if (user) {
-            console.log(user + ' logged in');
+            console.log(AUTH.currentUser.displayName + ' logged in');
+            sessionStorage.setItem('UID', AUTH.currentUser.uid);
         } else {
             console.log('log out');
+            sessionStorage.removeItem('UID');
         }
     }, (error) => {
         console.log('error!');
         console.log(error);
     });
 }
+fb_authChanged();
 
 function fb_logout() {
     const AUTH = getAuth();
@@ -91,9 +95,6 @@ function fb_logout() {
 
 function fb_write(path, data) {
     const REF = ref(fb_db, path);
-    console.info(fb_db);
-
-    console.log(REF);
 
     return new Promise((resolve) => {
         set(REF, data).then(() => {
@@ -206,8 +207,18 @@ async function fb_readSorted(path, sortkey, number) {
     });
 }
 
-function readstuff() {
-    console.log(getAuth());
+async function fb_valChanged(path, callback) {
+    const dbReference = ref(fb_db, path);
+    console.log(path);
+    
+    onChildChanged(dbReference, (snapshot) => {
+        /*
+        const newScore = snapshot.val();
+        const playerKey = snapshot.key;
+        */
+
+        callback();
+    });
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, readstuff };
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged };

@@ -18,19 +18,22 @@
 
         <header>
             <div class = 'flexBox'>
-            	<div style = "display: block;">
-            		<button class = 'logInButton' id = "LogButton">
-						Log In
-                    </button>
 
-                    <button class = 'logInButton' id = "SettingsButton" onclick = changeName()>
-                        User Settings
-                    </button>
-
+                <div class = 'flexBox' style = "width: 300px;">
+                    <div style = "display: block;">
+                        <button class = 'logInButton' id = "LogButton">
+                            Log In
+                        </button>
+    
+                        <button class = 'logInButton' id = "SettingsButton" onclick = changeName()>
+                            User Settings
+                        </button>
+    
+                    </div>
+                    <p><span id = "logStatus"></span><br><span id = 'DisplayName'>Display Name:</span> </p>
                 </div>
 
 
-                <p><span id = "logStatus"></span><br><span id = 'DisplayName'>Display Name:</span> </p>
 
                 <h1>
                     games!
@@ -47,7 +50,7 @@
                 <a href = './game.html'>
                     <div id = "space_shooter" class = 'gameIcon'>
                         <img>
-                        <p>space shooter game</p>
+                        <p class = 'gameName'>Space Shooter</p>
                     </div>
                 </a>
 
@@ -55,14 +58,7 @@
                 <a href = './game.html'>
                     <div id = "game_that_works" class = 'gameIcon'>
                         <img>
-                        <p>Game that works</p>
-                    </div>
-                </a>
-    
-                <a href = './game.html'>
-                    <div id = "space_shooter" class = 'gameIcon'>
-                        <img>
-                        <p>game 3</p>
+                        <p class = 'gameName'>Game that Works</p>
                     </div>
                 </a>
             </div>

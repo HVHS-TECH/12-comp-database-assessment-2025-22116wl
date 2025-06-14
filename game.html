@@ -16,20 +16,17 @@
         <script src="https://p5play.org/v3/p5play.js"></script>
 
         <link rel="stylesheet" href="./style.css">
-        
     </head>
 
 
     <body>
-        <header>
-            <div class = 'flexBox'>
-                <h1>title</h1>
-            </div>
+        <header class = 'flexBox'>
+            <a class = "BackButton" href = "index.html">Return to Main</a>
+
+            <h1></h1>
         </header>
 
-        <script type ="module" src="./gamePageScript.mjs"></script>
-        <button onclick = readstuff()>Click</button>
-
+        
         <div id = 'horizontalContainer'>
             
             <div class = 'gameDataContainer'>
@@ -64,5 +61,7 @@
                 console.log("No game in session storage");
             }
         </script>
+
+        <script type ="module" src="./gamePageScript.mjs"></script>
     </body>
 </html>

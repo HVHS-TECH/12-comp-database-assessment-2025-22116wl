@@ -15,8 +15,6 @@ window.fb_update = fb_update;
 window.fb_readSorted = fb_readSorted;
 window.fb_delete = fb_delete;
 
-fb_initialise();
-
 const elements = document.getElementsByClassName('gameIcon'); 
 for (let i = 0; i < elements.length; i++) {
 	const element = elements[i];
@@ -24,6 +22,11 @@ for (let i = 0; i < elements.length; i++) {
 	element.addEventListener("click", () => {
 		sessionStorage.setItem('game', element.id);
     });
+
+	element.querySelector("img").src = "/Games/" + element.id + "/Icon.png";
+
+	const nameModule = await import(`./Games/${element.id}/gameName.mjs`);
+	element.querySelector(".gameName").innerHTML = nameModule.gameName;
 }
 
 
@@ -38,9 +41,8 @@ document.getElementById('LogButton').addEventListener('click', function() {
 
 
 async function updateStatus() {
-	
-	
 	if (sessionStorage.getItem('UID') != null) {
+		//Logged in
 		document.getElementById('DisplayName').innerHTML = "Display Name: " + await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
 		document.getElementById('DisplayName').style = "Display: block;"
 
@@ -49,6 +51,7 @@ async function updateStatus() {
 
 		document.getElementById('SettingsButton').disabled = false;
 	} else {
+		//Not logged in
 		document.getElementById('LogButton').innerHTML = "Log In";
 		document.getElementById('logStatus').innerHTML = "Not logged in";
 
@@ -60,24 +63,25 @@ async function updateStatus() {
 
 async function logout() {
 	fb_logout();
-	sessionStorage.removeItem('UID');
 	updateStatus();
 }
 
 async function login() {
 	let userData = await fb_authenticate();
 	
-	const UID = userData.user.uid
-	sessionStorage.setItem('UID', UID);
+	const UID = userData.user.uid;
 
 	var userExists = await fb_read("UserData/" + UID);
+
 	if(userExists == null) {
+		//Add entry for this user in userData table
 		fb_write("UserData/" + UID, 
 			{
 				Username: "",
 			}
 		)
 
+		//Add entry for this user is all leaderboards
 		Object.keys(await fb_read('Leaderboard')).forEach(game => {
 			fb_write("Leaderboard/" + game + "/" + UID, { Score: 0 } )
 		});
@@ -90,8 +94,10 @@ async function login() {
 
 async function changeName() {
 	var newName = prompt("What do you want your display name to be?");
-	await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
-	updateStatus();
+	if (newName != null && newName != "" && newName != " ") {
+		await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
+		updateStatus();
+	}
 }
 
 window.changeName = changeName;

@@ -1,10 +1,11 @@
 var currentGame = sessionStorage.getItem('game');
 console.log(currentGame);
 
-import { fb_initialise, fb_authenticate, fb_readSorted, fb_read, fb_write, readstuff } from "./fb.mjs";
-fb_initialise();
+const nameModule = await import(`./Games/${currentGame}/gameName.mjs`);
+document.querySelector("h1").innerHTML = nameModule.gameName;
 
-window.readstuff = readstuff();
+import { fb_initialise, fb_authenticate, fb_readSorted, fb_read, fb_write, fb_valChanged } from "./fb.mjs";
+
 
 // Detect element added, if element is p5 canvas then add it to the div
 const observer = new MutationObserver((mutationsList) => {
@@ -28,13 +29,11 @@ window.addEventListener('scoreChanged', async function(event) {
     console.log("Event received!");
 
     const score = event.detail.score;
-    const oldScore = await fb_read('Leaderboard/' + currentGame + "/" + (sessionStorage.getItem("UID")) + "/Score");
+    const oldScore = await fb_read('Leaderboard/' + currentGame + "/" + sessionStorage.getItem("UID") + "/Score");
 
     console.log(score);
     console.log(oldScore);
 
-    await fb_authenticate();
-    
     if (score > oldScore) {
         //New High Schore
 
@@ -44,24 +43,44 @@ window.addEventListener('scoreChanged', async function(event) {
     }
 });
 
-const leaderboardSpots = document.getElementsByClassName('leaderboardEntry').length;
-console.log(leaderboardSpots);
-var leaderboard = await fb_readSorted("Leaderboard/" + currentGame, "Score", leaderboardSpots);
-
-var entries = document.getElementsByClassName('leaderboardEntry');
-for (var i = 0; i < entries.length; i++) {
-    var entry = entries[i];
-
-    if (leaderboard[i] != null) {
-        const key = Object.keys(leaderboard[i])[0];
-        const value = leaderboard[i][key];  //entry from first key in object (just score)
+async function drawLeaderboard() {
+    const leaderboardSpots = document.getElementsByClassName('leaderboardEntry').length;
+    console.log(leaderboardSpots);
+    var leaderboard = await fb_readSorted("Leaderboard/" + currentGame, "Score", leaderboardSpots);
+    
+    var entries = document.getElementsByClassName('leaderboardEntry');
+    for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
         
-        const userName = await fb_read("UserData/" + key + "/Username");
-        
-        entry.querySelector(".leaderboardUsername").innerHTML = userName;
-        entry.querySelector(".leaderboardScoreNumber").innerHTML = value;
-    } else {
-        // If there is not 4th 5th 6th etc place entry then hide the html element
-        entry.style = "display: none";
+        if (leaderboard[i] != null) {
+            const key = Object.keys(leaderboard[i])[0];
+            const value = leaderboard[i][key];  //entry from first key in object (just score)
+            
+            if (key == sessionStorage.getItem('UID')) {
+                //is user
+                console.log(entry);
+                console.log(entry instanceof HTMLElement);
+                
+                entry.querySelector(".leaderboardUsername").style.color = "#ba8800";
+                entry.querySelector(".leaderboardScoreNumber").style.color = "#ba8800";
+            } else {
+                entry.querySelector(".leaderboardUsername").style.color = "#000000";
+                entry.querySelector(".leaderboardScoreNumber").style.color = "#000000";
+            }
+
+            entry.querySelector(".leaderboardUsername").innerHTML = await fb_read("UserData/" + key + "/Username");;
+            entry.querySelector(".leaderboardScoreNumber").innerHTML = value;
+            
+            entry.style = "display: list-item";
+        } else {
+            // If there is not 4th 5th 6th etc place entry then hide the html element
+            entry.style = "display: none";
+        }
     }
 }
+
+drawLeaderboard();
+
+fb_valChanged("Leaderboard/" + currentGame, function() {
+    drawLeaderboard();
+});

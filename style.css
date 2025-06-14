@@ -44,6 +44,8 @@ body {
 	height: 180px;
 	background-color: gray;
 	border-radius: 8px 8px 0px 0px;
+
+	border-bottom: 2px solid black;
 }
 
 .gameIcon:hover {
@@ -67,12 +69,19 @@ a {
 
 h1 { 
 	text-align: center;
+	line-height: 70px;
+
 	width: 30%;
+	height: 80px;
 	margin: 0px;
 	font-size: 40px;
 	padding: 10px;
 	margin-left: auto;
 	margin-right: auto;
+
+	position: absolute;
+	left: 50%;
+  	transform: translateX(-50%);
 }
 
 .logInButton {
@@ -83,17 +92,19 @@ h1 {
 	font-size: 13px;
 }
 
-button:disabled {
-	background-color: rgb(240, 240, 240);
-}
-
 button {
 	background-color: rgb(200, 200, 200);
 }
 
 button:hover {
-	
+	background-color: rgb(180, 180, 180);
 }
+
+
+button:disabled {
+	background-color: rgb(240, 240, 240);
+}
+
 
 header {
 	height: 100px;
@@ -107,7 +118,7 @@ header {
 .p5-fullscreen { 
 	margin-right: auto;
 
-	max-height: calc(100vh - 68px);
+	max-height: 100%;
 	order: 1;
 
 	padding-right: auto;
@@ -120,7 +131,7 @@ header {
 #horizontalContainer {
 	display: flex;
 	width: 100vw;
-	height: calc(100vh - 68px);
+	height: calc(100vh - 102px);
 }
 
 .gameDataContainer {
@@ -132,7 +143,7 @@ header {
 	width: 20vw;
 	min-width: 20vw;
 
-	height: 80vh;
+	height: 80%;
 
 	order: 2;
 }
@@ -165,4 +176,28 @@ header {
 	margin-right: 5px;
 
 	float: right;
+}
+
+.BackButton {
+	display: block;
+	width: 150px;
+	height: 60px;
+	
+	text-align: center;
+	line-height: 60px;
+
+	font-size: 15px;
+
+	margin: 10px;
+	margin-top: auto;
+	margin-bottom: auto;
+
+	background-color: rgb(200,200,200);
+
+	border: 3px solid black;
+	border-radius: 5px;
+}
+
+.BackButton:hover {
+	background-color: rgb(180, 180, 180);
 }
