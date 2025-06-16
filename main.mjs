@@ -58,7 +58,7 @@ for (let i = 0; i < elements.length; i++) {
 		sessionStorage.setItem('game', element.id);
     });
 
-	element.querySelector("img").src = "/Games/" + element.id + "/Icon.png";
+	element.querySelector("img").src = "./Games/" + element.id + "/Icon.png";
 
 	const metaData = await import(`./Games/${element.id}/gameMetaData.mjs`);
 	element.querySelector(".gameName").innerHTML = metaData.gameName;
