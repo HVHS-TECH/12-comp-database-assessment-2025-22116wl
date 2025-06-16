@@ -45,20 +45,84 @@ async function fb_authenticate() {
     // The following makes Google ask the user to select the account
 
     return new Promise((resolve) => {
-        PROVIDER.setCustomParameters({
-            prompt: 'select_account'
-        });
+        (async () => {
+
+            PROVIDER.setCustomParameters({
+                prompt: 'select_account'
+            });
+            
+            var userData;
+    
+            try {
+                const result = await signInWithPopup(AUTH, PROVIDER);
+    
+                const UID = result.user.uid;
+                var userExists = await fb_read("UserData/" + UID);
         
-        signInWithPopup(AUTH, PROVIDER).then((result) => {
-            console.log('success');
+                if(userExists == null) {
+                    //Add entry for this user in userData table
+                    fb_write("UserData/" + UID, 
+                        {
+                            Username: "",
+                        }
+                    )
+        
+                    //Add entry for this user is all leaderboards
+                    
+                    Object.keys(await fb_read('Leaderboard')).forEach(game => {
+                        fb_write("Leaderboard/" + game + "/" + UID, { Score: 0 } )
+                    });
+                    
+                    changeName(true);
+                }
+
+                resolve(result);
+    
+            } catch (error) {
+                console.log('error!');
+                console.log(error);
+                resolve(null);
+    
+            }
+
+        })();
+
+
+        /*
+        signInWithPopup(AUTH, PROVIDER).then((result) => {    
             resolve(result);
         })
         
         .catch((error) => {
-            console.log('error!');
-            console.log(error);
-            resolve(null);
+            
         });
+        */
+
+    });
+}
+
+async function changeName(mandatory) {
+    return new Promise((resolve) => {
+        (async () => {
+            var newName = prompt("What do you want your display name to be?");
+            if (newName != null && newName != "" && newName != " ") {
+                await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
+                resolve(newName);
+            } else {
+                //user didn't set name
+    
+                if (mandatory) {
+                    //resolve user's google name
+                    const newName = getAuth().currentUser.displayName;
+                    
+                    await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
+                    resolve(newName);
+
+                } else {
+                    resolve(null);
+                }
+            }
+        })();
     });
 }
 
@@ -83,13 +147,17 @@ fb_authChanged();
 function fb_logout() {
     const AUTH = getAuth();
 
-    signOut(AUTH).then(() => {
-        console.log('successful logout');
-    })
-
-    .catch((error) => {
-        console.log('error in loging out');
-        console.log(error);
+    return new Promise((resolve) => {
+        signOut(AUTH).then(() => {
+            resolve(true);
+            console.log('successful logout');
+        })
+    
+        .catch((error) => {
+            resolve(null);
+            console.log('error in loging out');
+            console.log(error);
+        });
     });
 }
 
@@ -217,8 +285,26 @@ async function fb_valChanged(path, callback) {
         const playerKey = snapshot.key;
         */
 
-        callback();
+        callback(snapshot.key);
     });
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged };
+async function changeLog() {
+	if (sessionStorage.getItem('UID') == null) {
+        return new Promise((resolve) => {
+            (async () => {
+                const userData = await fb_authenticate();
+                resolve (userData);
+            })();
+        });
+	} else {
+        return new Promise((resolve) => {
+            (async () => {
+                const logOut = await fb_logout();
+                resolve (logOut);
+            })();
+        });
+	}
+}
+
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeName, changeLog };
