@@ -70,7 +70,7 @@ async function drawLeaderboard() {
                 entry.querySelector(".leaderboardScoreNumber").style.color = "#000000";
             }
 
-            entry.querySelector(".leaderboardUsername").innerHTML = await fb_read("UserData/" + key + "/Username");;
+            entry.querySelector(".leaderboardUsername").innerHTML = await fb_read("UserData/" + key + "/userName");;
             entry.querySelector(".leaderboardScoreNumber").innerHTML = value;
             
             entry.style = "display: list-item";
@@ -86,7 +86,7 @@ async function updateLoginDiv() {
 
     if (UID != null) {
         //User logged in
-        document.getElementById('loginStatus').innerHTML = "Logged In As: " + await fb_read("UserData/" + UID + '/Username');
+        document.getElementById('loginStatus').innerHTML = "Logged In As: " + await fb_read("UserData/" + UID + '/userName');
 
         document.getElementById('loginScreen').querySelector('h2').style = "display: block;";
         document.getElementById('currentScore').style = "display: block;";

@@ -17,7 +17,7 @@ async function updateStatus() {
 		
 		document.getElementById('SettingsButton').style = "Display: block;"
 		
-		document.getElementById('DisplayName').innerHTML = "Display Name: " + await fb_read("UserData/" + sessionStorage.getItem('UID') + "/Username");
+		document.getElementById('DisplayName').innerHTML = "Display Name: " + await fb_read("UserData/" + sessionStorage.getItem('UID') + "/userName");
 	} else {
 		//Not logged in
 		console.log('not logged in');

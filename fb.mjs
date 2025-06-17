@@ -57,13 +57,18 @@ async function fb_authenticate() {
                 const result = await signInWithPopup(AUTH, PROVIDER);
     
                 const UID = result.user.uid;
+                
+                
                 var userExists = await fb_read("UserData/" + UID);
-        
+                
                 if(userExists == null) {
+                    //Create new Account
+
                     //Add entry for this user in userData table
                     fb_write("UserData/" + UID, 
                         {
-                            Username: "",
+                            userName: "",
+                            fullName: result.user.displayName, //private info, just so i know who's who
                         }
                     )
         
@@ -106,7 +111,7 @@ async function changeName(mandatory) {
         (async () => {
             var newName = prompt("What do you want your display name to be?");
             if (newName != null && newName != "" && newName != " ") {
-                await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
+                await fb_write("UserData/" + sessionStorage.getItem('UID') + "/userName", newName);
                 resolve(newName);
             } else {
                 //user didn't set name
@@ -115,7 +120,7 @@ async function changeName(mandatory) {
                     //resolve user's google name
                     const newName = getAuth().currentUser.displayName;
                     
-                    await fb_write("UserData/" + sessionStorage.getItem('UID') + "/Username", newName);
+                    await fb_write("UserData/" + sessionStorage.getItem('UID') + "/userName", newName);
                     resolve(newName);
 
                 } else {
