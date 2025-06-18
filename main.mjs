@@ -4,7 +4,7 @@
 // Written by Wilfred Leicester, Term 2 2025
 /**************************************************************/
 
-import { fb_initialise, fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, changeName, changeLog } from './fb.mjs';
+import { fb_initialise, fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, changeName, changeLog, fb_getAuthData } from './fb.mjs';
 
 
 async function updateStatus() {
@@ -17,7 +17,10 @@ async function updateStatus() {
 		
 		document.getElementById('SettingsButton').style = "Display: block;"
 		
+
 		document.getElementById('DisplayName').innerHTML = "Display Name: " + await fb_read("UserData/" + sessionStorage.getItem('UID') + "/userName");
+
+		document.getElementById('loginBox').querySelector('img').src = `${fb_getAuthData().currentUser.photoURL}`;
 	} else {
 		//Not logged in
 		console.log('not logged in');
@@ -27,7 +30,7 @@ async function updateStatus() {
 		document.getElementById('DisplayName').style = "Display: none;"
 		document.getElementById('SettingsButton').style = "Display: none;"
 
-		document.getElementById('loginField').querySelector('img').src = ""
+		document.getElementById('loginBox').querySelector('img').src = "./Assets/Images/notLoggedIn.png";
 	}
 }
 
@@ -68,7 +71,7 @@ for (let i = 0; i < elements.length; i++) {
 //If logged in, log out. If logged out, log in.
 
 async function logChange() {
-	await changeLog();
+	const userInfo = await changeLog();
 	updateStatus();
 }
 

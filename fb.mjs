@@ -312,4 +312,8 @@ async function changeLog() {
 	}
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeName, changeLog };
+function fb_getAuthData() {
+    return getAuth();
+}
+
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeName, changeLog, fb_getAuthData };
