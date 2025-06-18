@@ -27,6 +27,7 @@ async function updateStatus() {
 		document.getElementById('DisplayName').style = "Display: none;"
 		document.getElementById('SettingsButton').style = "Display: none;"
 
+		document.getElementById('loginField').querySelector('img').src = ""
 	}
 }
 
