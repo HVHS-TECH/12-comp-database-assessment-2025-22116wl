@@ -275,6 +275,8 @@ header {
 .pfp {
 	border-radius: 100%;
 	background-color: black;
+
+	border: 1.5px solid black;
 }
 
 #loginButtons {
